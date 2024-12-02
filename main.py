@@ -24,7 +24,7 @@ def main(page: ft.Page):
     page.horizontal_alignment= ft.CrossAxisAlignment.CENTER
     page.vertical_alignment= ft.MainAxisAlignment.CENTER
     page.window.width = 360
-    page.window.height = 720
+    page.window.height = 740
     page.padding = 0
 
     """ Funcao de cadastro """
@@ -43,8 +43,9 @@ def main(page: ft.Page):
                 img_up = inserts.save_image_profile(file_input.value)
                 insert = inserts.insert_values(cliente)
                 img_alert.src = './assets/ok.png'
-                text_alert.color = ft.colors.GREEN_300
+                text_alert.color = ft.colors.GREEN_500
                 alert_app(insert)
+                clear_all(e)
 
     # Pegar caminho do arquivo
     def get_file_picker(e):
@@ -57,7 +58,7 @@ def main(page: ft.Page):
         alert.visible = True
         text_alert.value = value
         alert.update()
-        sleep(3)
+        sleep(5)
         alert.visible = False
         text_alert.value = ''
         text_alert.color = ft.colors.RED_500
@@ -109,35 +110,40 @@ def main(page: ft.Page):
     cpf = ft.TextField(
         label= 'CPF:',
         width= 200,
+        height= 60,
         border_radius= 16,
         border_width= 2,
         color= ft.colors.WHITE,
         bgcolor= ft.colors.BLACK38,
-        border_color= ft.colors.BLACK,
+        border_color= 'transparent',
         cursor_color= '#000000',
-        max_length= 11
+        max_length= 11,
+        prefix_icon=(ft.icons.VERIFIED_USER),
     )
 
     name = ft.TextField(
         label= 'Nome:',
         width= 200,
+        height= 60,
         border_radius= 16,
         border_width= 2,
         color= ft.colors.WHITE,
         bgcolor= ft.colors.BLACK38,
-        border_color= ft.colors.BLACK,
+        border_color= 'transparent',
         cursor_color= '#000000',
         capitalization= ft.TextCapitalization.WORDS,
+        prefix_icon=(ft.icons.PERSON),
     )
 
     email = ft.TextField(
         label= 'Email:',
         width= 200,
+        height= 60,
         border_radius= 16,
         border_width= 2,
         color= ft.colors.WHITE,
         bgcolor= ft.colors.BLACK38,
-        border_color= ft.colors.BLACK,
+        border_color= 'transparent',
         cursor_color= '#000000',
         prefix_icon=(ft.icons.EMAIL)
     )
@@ -153,7 +159,7 @@ def main(page: ft.Page):
         border_width= 2,
         color= ft.colors.WHITE,
         bgcolor= ft.colors.BLACK38,
-        border_color= ft.colors.BLACK,
+        border_color= 'transparent',
         cursor_color= '#000000'
     )
 
@@ -170,7 +176,7 @@ def main(page: ft.Page):
         border_width= 2,
         color= ft.colors.WHITE,
         bgcolor= ft.colors.BLACK38,
-        border_color= ft.colors.BLACK,
+        border_color= 'transparent',
         cursor_color= '#000000'
     )
 
@@ -196,9 +202,71 @@ def main(page: ft.Page):
         height= 40,
         icon= ft.icons.CLEAR_ALL,
         text= 'LIMPAR',
-        bgcolor= ft.colors.WHITE60,
+        bgcolor= ft.colors.WHITE54,
         color= ft.colors.BLACK,
         on_click= clear_all
+    )
+
+    ###################################### EXIBICAO DOS DADOS ######################################
+    search_input = ft.TextField(
+        width= 200,
+        height= 40,
+        border_radius= 16,
+        border_width= 2,
+        color= ft.colors.WHITE,
+        bgcolor= ft.colors.BLACK12,
+        border_color= 'transparent',
+        cursor_color= '#000000',
+        cursor_height= 18,
+        suffix_icon=(ft.icons.SEARCH)
+    )
+
+    profile_img = ft.Image(
+        src= './assets/0p.jpg',
+        width= 60,
+        border_radius= 50
+    )
+
+    profile_name = ft.Text(
+        value= 'Profile None',
+        color= ft.colors.BLACK,
+        size= 18
+    )
+
+    profile_email = ft.Text(
+        value= 'exemple@email.com',
+        color= ft.colors.BLACK,
+        italic= True,
+        size= 14
+    )
+
+    profile_date = ft.Text(
+        value= '15/05/2015',
+        color= ft.colors.BLACK,
+        italic= True,
+        size= 14
+    )
+
+    cerd_profile = ft.Container(
+        bgcolor= ft.colors.WHITE,
+        padding= 18,
+        expand= True,
+        width= 260,
+        height= 220,
+        border_radius= 24,
+        shadow= ft.BoxShadow(color=ft.colors.BLACK26, blur_radius=5),
+        content=ft.Column(
+            spacing= 4,
+            controls=[
+                ft.Row([profile_img, profile_name]),
+                ft.Divider(height=2),
+                ft.Text('Email:', color= ft.colors.BLACK, weight=ft.FontWeight.W_600),
+                profile_email,
+                ft.Text('Data de nascimento:', color= ft.colors.BLACK, weight=ft.FontWeight.W_600),
+                profile_date,
+                ft.Divider(height=2)
+            ]
+        )
     )
 
     container_main = ft.Stack(
@@ -209,16 +277,18 @@ def main(page: ft.Page):
             # Conteudo acima
             ft.Container(
                 bgcolor= ft.colors.WHITE24,
-                padding= 20,
+                padding= 10,
                 expand= True,
                 width= 300,
-                height= 620,
+                height= 640,
                 border_radius= 24,
                 blur= 4,
                 content=ft.Column(
-                    scroll= ft.ScrollMode.AUTO,
+                    scroll= ft.ScrollMode.HIDDEN,
                     spacing= 10,
                     controls=[
+                        search_input,
+                        cerd_profile,
                         ft.Text('CADASTRE-SE', size=22, color= ft.colors.RED_800, weight=ft.FontWeight.W_500),
                         alert,
                         cpf,
