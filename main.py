@@ -40,12 +40,13 @@ def main(page: ft.Page):
                 alert_app(f)
             else:    
                 alert.visible = True
-                insert = inserts.insert_values(cliente)
-                text_alert.color = ft.colors.GREEN_300
-                text_alert.value = f"{insert}"
                 img_up = inserts.save_image_profile(file_input.value)
-                alert.update()
+                insert = inserts.insert_values(cliente)
+                img_alert.src = './assets/ok.png'
+                text_alert.color = ft.colors.GREEN_300
+                alert_app(insert)
 
+    # Pegar caminho do arquivo
     def get_file_picker(e):
         if e.files:
             file_input.value = f"{e.files[0].path}"
@@ -54,13 +55,13 @@ def main(page: ft.Page):
     # Update em alerta
     def alert_app(value):
         alert.visible = True
-        text_alert.color = ft.colors.RED_500
         text_alert.value = value
         alert.update()
         sleep(3)
         alert.visible = False
         text_alert.value = ''
         text_alert.color = ft.colors.RED_500
+        img_alert.src = './assets/alert.png'
         alert.update()
 
     # Limpar inputs
@@ -69,6 +70,7 @@ def main(page: ft.Page):
         name.value = ''
         email.value = ''
         nascimento_input.value = ''
+        file_input.value = ''
         page.update()
 
     # Pegar a data de nascimento
@@ -86,16 +88,20 @@ def main(page: ft.Page):
         on_change= handle_change,
         on_dismiss= handle_dismissal
     )
+
     text_alert = ft.Text(
             value= '',
             size= 15,
             weight= ft.FontWeight.W_500,
             color= ft.colors.RED_500
         )
+    
+    img_alert = ft.Image(src='./assets/alert.png', width=22,)
+    
     alert = ft.Row(
         visible= False,
         controls=[
-        ft.Image(src='./assets/alert.png', width=20,),
+        img_alert,
         text_alert
     ],alignment=ft.MainAxisAlignment.CENTER
     )
@@ -215,11 +221,8 @@ def main(page: ft.Page):
                     controls=[
                         ft.Text('CADASTRE-SE', size=22, color= ft.colors.RED_800, weight=ft.FontWeight.W_500),
                         alert,
-                        #ft.Text('CPF', color= ft.colors.BLACK, weight=ft.FontWeight.BOLD),
                         cpf,
-                        #ft.Text('Nome Completo', color= ft.colors.BLACK, weight=ft.FontWeight.BOLD),
                         name,
-                        #ft.Text('Email', color= ft.colors.BLACK, weight=ft.FontWeight.BOLD),
                         email,
                         ft.Text('Data de nascimento:', color= ft.colors.BLACK, weight=ft.FontWeight.BOLD),
                         ft.Row([btn_nascimento, nascimento_input],alignment= ft.MainAxisAlignment.CENTER),

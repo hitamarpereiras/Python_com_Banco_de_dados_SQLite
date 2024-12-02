@@ -44,9 +44,12 @@ def save_image_profile(dados):
     cursor = connect.cursor()
 
     try:
+        with open(dados, mode='rb') as file:
+            data = file.read()
+
         commandSQL = "INSERT INTO Imagens (dados) VALUES (?);"
 
-        cursor.execute(commandSQL, (dados,))
+        cursor.execute(commandSQL, (data,))
         connect.commit()
 
     except Exception as e:
