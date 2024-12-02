@@ -1,5 +1,6 @@
 import os
 import sqlite3 as sql
+from time import sleep
 
 def __CREATE_CONECTION__():
     try:
@@ -37,8 +38,8 @@ def create_tables():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             dados BLOB);"""
         
-        cursor.execute(command_1)
         cursor.execute(command_2)
+        cursor.execute(command_1)
         connect.commit()
 
         return 'Processo concluido com sucesso!'

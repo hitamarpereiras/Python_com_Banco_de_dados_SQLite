@@ -43,6 +43,7 @@ def main(page: ft.Page):
                 insert = inserts.insert_values(cliente)
                 text_alert.color = ft.colors.GREEN_300
                 text_alert.value = f"{insert}"
+                img_up = inserts.save_image_profile(file_input.value)
                 alert.update()
 
     def get_file_picker(e):
@@ -107,7 +108,8 @@ def main(page: ft.Page):
         color= ft.colors.WHITE,
         bgcolor= ft.colors.BLACK38,
         border_color= ft.colors.BLACK,
-        cursor_color= '#000000'
+        cursor_color= '#000000',
+        max_length= 11
     )
 
     name = ft.TextField(

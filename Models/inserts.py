@@ -21,11 +21,11 @@ def insert_values(client: Client):
     cursor = connect.cursor()
 
     try:
-        commandSQL3 = '''
+        commandSQL = '''
             INSERT INTO Cliente(cpf, nome, email, nascimento) 
             VALUES (?, ?, ?, ?);'''
 
-        cursor.execute(commandSQL3, (client.cpf, client.nome, client.email, client.dt_nascimento))
+        cursor.execute(commandSQL, (client.cpf, client.nome, client.email, client.dt_nascimento))
         connect.commit()
             
         return 'Cliente inserido com sucesso!'
@@ -39,3 +39,20 @@ def insert_values(client: Client):
             connect.close()
         
 
+def save_image_profile(dados):
+    connect = __CREATE_CONECTION__()
+    cursor = connect.cursor()
+
+    try:
+        commandSQL = "INSERT INTO Imagens (dados) VALUES (?);"
+
+        cursor.execute(commandSQL, (dados,))
+        connect.commit()
+
+    except Exception as e:
+        print(f"Erro IMG = {e}")
+
+    finally:
+        if connect:
+            cursor.close()
+            connect.close()
