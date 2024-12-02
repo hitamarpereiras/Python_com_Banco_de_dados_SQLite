@@ -29,5 +29,5 @@ O objetivo principal deste projeto é demonstrar como conectar, manipular e gere
 
 2. **Clonar o repositório:**
    ```bash
-   git clone https://github.com/usuario/python-com-banco-de-dados.git
+   git clone https://github.com/hitamarpereiras/Python_com_Banco_de_dados_SQLite.git
    cd python-com-banco-de-dados
