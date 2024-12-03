@@ -1,3 +1,4 @@
+import os
 import flet as ft
 import threading
 import time
@@ -47,6 +48,31 @@ def main(page: ft.Page):
                 alert_app(insert)
                 clear_all(e)
 
+    def clients_search(e):
+        if search_input.value == '':
+            alert_app('Campo de Pesquisa VAZIO')
+        else:
+            client_id = search_input.value
+            res1 = inserts.search_client(client_id)
+            res2 = inserts.search_image(client_id)
+            update_card(res1, res2)
+
+    def update_card(res1, res2):
+            profile_img.src = "./assets/0p.jpg"
+            profile_img.update()
+            sleep(2)
+            if res2:
+                profile_img.src = f"./Data/profiles/{res2}"
+                profile_img.update()
+            else:
+                profile_name.value = 'Nao encontrado!'
+                profile_name.update()
+                
+            profile_name.value = res1[1]
+            profile_email.value = res1[3]
+            profile_date.value = res1[4]
+            card_profile.update()
+
     # Pegar caminho do arquivo
     def get_file_picker(e):
         if e.files:
@@ -61,7 +87,7 @@ def main(page: ft.Page):
         sleep(5)
         alert.visible = False
         text_alert.value = ''
-        text_alert.color = ft.colors.RED_500
+        text_alert.color = ft.colors.RED_600
         img_alert.src = './assets/alert.png'
         alert.update()
 
@@ -94,7 +120,7 @@ def main(page: ft.Page):
             value= '',
             size= 15,
             weight= ft.FontWeight.W_500,
-            color= ft.colors.RED_500
+            color= ft.colors.RED_600
         )
     
     img_alert = ft.Image(src='./assets/alert.png', width=22,)
@@ -218,7 +244,8 @@ def main(page: ft.Page):
         border_color= 'transparent',
         cursor_color= '#000000',
         cursor_height= 18,
-        suffix_icon=(ft.icons.SEARCH)
+        suffix_icon=(ft.icons.SEARCH),
+        on_blur= clients_search
     )
 
     profile_img = ft.Image(
@@ -247,7 +274,7 @@ def main(page: ft.Page):
         size= 14
     )
 
-    cerd_profile = ft.Container(
+    card_profile = ft.Container(
         bgcolor= ft.colors.WHITE,
         padding= 18,
         expand= True,
@@ -288,7 +315,7 @@ def main(page: ft.Page):
                     spacing= 10,
                     controls=[
                         search_input,
-                        cerd_profile,
+                        card_profile,
                         ft.Text('CADASTRE-SE', size=22, color= ft.colors.RED_800, weight=ft.FontWeight.W_500),
                         alert,
                         cpf,
