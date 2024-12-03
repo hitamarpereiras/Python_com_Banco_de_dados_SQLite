@@ -48,9 +48,21 @@ def main(page: ft.Page):
                 alert_app(insert)
                 clear_all(e)
 
+    """ Buscar clientes e atualizar """
     def clients_search(e):
         if search_input.value == '':
             alert_app('Campo de Pesquisa VAZIO')
+        elif 'up' in search_input.value:
+            valor = search_input.value.replace('up', '')
+            print(valor)
+            res = inserts.search_client(valor)
+            cpf.value = res[1]
+            name.value = res[2]
+            email.value = res[3]
+            nascimento_input.value = res[4]
+            file_input.disabled = True
+            print(res)
+            page.update()
         else:
             client_id = search_input.value
             res1 = inserts.search_client(client_id)
@@ -67,8 +79,8 @@ def main(page: ft.Page):
             else:
                 profile_name.value = 'Nao encontrado!'
                 profile_name.update()
-                
-            profile_name.value = res1[1]
+
+            profile_name.value = res1[2]
             profile_email.value = res1[3]
             profile_date.value = res1[4]
             card_profile.update()
