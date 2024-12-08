@@ -91,9 +91,13 @@ def update_client(cliente_id, cliente: UserDAO):
         cursor = conn.cursor()
         cursor.execute('PRAGMA foreign_key = on')
 
-        command = f"UPDATE Clientes WHERE id = {cliente_id} (nome, email, senha, nascimento) VALUES (?, ?, ?, ?)"
-        cursor.execute(command)
+        command_1 = f"UPDATE Clientes WHERE id = {cliente_id} (nome, email, senha, nascimento, foto) VALUES (?, ?, ?, ?, ?)"
 
+        command_2 = f"UPDADTE Cursos WHERE id = {cliente_id} (titulo, comentario) VALUES (?, ?);"
+        cursor.execute(command_1, (cliente.name, cliente.email, cliente.password, cliente.date, cliente.picture))
+        cursor.execute(command_2, (cliente.course, cliente.comment))
+        conn.commit()
+        
         return "Update Successfully!"
 
     except Exception as e:
