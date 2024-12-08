@@ -89,20 +89,35 @@ def update_client(cliente_id, cliente: UserDAO):
     try:
         conn = cdb.connection_on()
         cursor = conn.cursor()
-        cursor.execute('PRAGMA foreign_key = on')
 
-        command_1 = f"UPDATE Clientes WHERE id = {cliente_id} (nome, email, senha, nascimento, foto) VALUES (?, ?, ?, ?, ?)"
+        command_1 = f"UPDATE Clientes SET nome = ?, email = ?, senha = ?, nascimento = ?, foto = ? WHERE id = ?;"
 
-        command_2 = f"UPDADTE Cursos WHERE id = {cliente_id} (titulo, comentario) VALUES (?, ?);"
-        cursor.execute(command_1, (cliente.name, cliente.email, cliente.password, cliente.date, cliente.picture))
-        cursor.execute(command_2, (cliente.course, cliente.comment))
+        command_2 = f"UPDATE Cursos SET titulo = ?, comentario = ? WHERE id = ?;"
+        with open(cliente.picture, mode='rb') as dados:
+            image = dados.read()
+        cursor.execute(command_1, (cliente.name, cliente.email, cliente.password, cliente.date, image, cliente_id))
+        cursor.execute(command_2, (cliente.course, cliente.comment, cliente_id))
         conn.commit()
-        
-        return "Update Successfully!"
+
+        cursor.close()
+        conn.close() 
+
+        return True, "Update Successfully!"
 
     except Exception as e:
-        return f"[ERROR] = {e}"
+        return False, f"[ERROR] = {e}"
     
-    finally:
+def delete_cliente(client_id):
+    try:
+        conn = cdb.connection_on()
+        cursor = conn.cursor()
+
+        command = "DELETE FROM Clientes WHERE id = ?;"
+        cursor.execute(command, (client_id,))
+        conn.commit()
         cursor.close()
-        conn.close()  
+        conn.close()
+        return 'Delete Successfully!'
+    
+    except Exception as e:
+         return f"[ERROR] = {e}"

@@ -44,8 +44,9 @@ def main(page: ft.Page):
                     alert_function(cmd, cmd_res)
 
     def update_and_search(e):
-        if 'up' in search.value.lower():
-            client_id = search.value.replace('up', '')
+        id_c = search.value.lower()
+        if 'up' in id_c:
+            client_id = id_c.replace('up', '')
             res, values = DAO.search_client(client_id)
             if res:
                 name.value = res[1]
@@ -57,7 +58,7 @@ def main(page: ft.Page):
                 alert_function(False, 'Not implemented!')
         else:
             clean_card_input(e)
-            res, values = DAO.search_client(search.value)
+            res, values = DAO.search_client(id_c)
             load.visible = True
             card_cliente.update()
             sleep(2)
@@ -69,10 +70,45 @@ def main(page: ft.Page):
                 date_card.value = res[4]
                 folder = get_path_folders(e)
                 img_dard.src = f"{os.path.join(folder, values)}"
-                print(f"{os.path.join(folder, values)}")
                 card_cliente.update()
             else:
                 alert_function(False, values)
+
+    def cliente_up(e):
+        if name.value == '' or email.value == '':
+            alert_function(False, 'Please fill in the fields!') 
+        elif password.value == '' or date_value.value == '':
+            alert_function(False, 'Please fill in the fields!')
+        elif cursos.value == '' or comment.value == '':
+            alert_function(False, 'Please fill in the fields!')
+        else:
+            client = DAO.UserDAO(name.value, email.value, password.value, date_value.value, picture_path.value, cursos.value, comment.value)
+            v, res = client.is_valid()
+            if not v:
+                alert_function(v, res)
+            else:
+                if 'up' in search.value:
+                    client_id = search.value.replace('up', '') 
+                    cmd, cmd_res = DAO.update_client(client_id, client)
+                    if cmd:
+                        alert_function(cmd, cmd_res)
+                        clean_inputs(e)
+                    else:
+                        alert_function(cmd, cmd_res)
+                else:
+                    alert_function(False, 'Please isert UP and ID')
+
+    def client_delete_now(e):
+        if search.value:
+            client_id = search.value.replace('up', '') 
+            res = DAO.delete_cliente(client_id)
+            if res:
+                alert_function(True, res)
+                clean_inputs(e)
+            else:
+                alert_function(False, res)
+        else:
+            alert_function(False, 'Please isert ID')
 
     def get_path_folders(e):
         path = 'Data'
@@ -266,7 +302,7 @@ def main(page: ft.Page):
         color= 'white',
         bgcolor= '#364461',
         icon= ft.icons.UPDATE,
-        on_click= ''
+        on_click= cliente_up
     )
 
     button_delete = ft.ElevatedButton(
@@ -275,7 +311,7 @@ def main(page: ft.Page):
         color= '#feedbf',
         bgcolor= '#bb375e',
         icon= ft.icons.REMOVE,
-        on_click= ''
+        on_click= client_delete_now
     )
 
     search = ft.TextField(
