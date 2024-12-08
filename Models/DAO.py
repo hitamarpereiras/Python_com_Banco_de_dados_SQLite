@@ -94,3 +94,7 @@ def update_client(cliente: UserDAO):
         command = ""
     except Exception as e:
         return f"[ERROR] = {e}"
+    
+    finally:
+        cursor.close()
+        conn.close()  
