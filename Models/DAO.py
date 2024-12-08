@@ -85,13 +85,17 @@ def search_client(client_id):
         cursor.close()
         conn.close()
 
-def update_client(cliente: UserDAO):
+def update_client(cliente_id, cliente: UserDAO):
     try:
         conn = cdb.connection_on()
         cursor = conn.cursor()
         cursor.execute('PRAGMA foreign_key = on')
 
-        command = ""
+        command = f"UPDATE Clientes WHERE id = {cliente_id} (nome, email, senha, nascimento) VALUES (?, ?, ?, ?)"
+        cursor.execute(command)
+
+        return "Update Successfully!"
+
     except Exception as e:
         return f"[ERROR] = {e}"
     
